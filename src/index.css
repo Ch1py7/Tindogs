@@ -1,0 +1,26 @@
+@unocss;
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('/fonts/Satoshi-Variable.ttf') format('woff2');
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Satoshi', sans-serif;
+  background: radial-gradient(circle at 50% 0%, #134a81 0%, #050505 50rem);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+}
