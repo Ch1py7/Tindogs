@@ -1,9 +1,9 @@
 import { Heart, MessageCircle } from 'lucide-react'
 import { FC, ReactElement, useState } from 'react'
-import { Database } from 'types/supabase'
+import { Supabase } from 'types/supabase'
 
 interface DogCardProps {
-  user: Database['public']['Tables']['DogsInfo']['Row']
+  user: Supabase.Row
   image: string | null
 }
 

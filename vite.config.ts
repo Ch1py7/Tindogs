@@ -18,6 +18,7 @@ export default defineConfig({
       styles: path.resolve(__dirname, './src/styles'),
       utils: path.resolve(__dirname, './src/utils'),
       api: path.resolve(__dirname, './src/api'),
+      pages: path.resolve(__dirname, './src/pages'),
     },
   },
   plugins: [react(), UnoCSS()],

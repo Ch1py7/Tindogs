@@ -1,0 +1,6 @@
+export * from './DogCard'
+export * from './Footer'
+export * from './Form'
+export * from './Gallery'
+export * from './Header'
+export * from './Main'

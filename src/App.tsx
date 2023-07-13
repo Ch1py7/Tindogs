@@ -1,14 +1,13 @@
-import { Footer } from 'components/Footer'
-import { Gallery } from 'components/Gallery'
-import { Main } from 'components/Main'
+import { LoginPage, RegisterPage, TindogsPage } from 'pages'
 import { FC, ReactElement } from 'react'
+import { Route, Routes } from 'react-router-dom'
 
 export const App: FC = (): ReactElement => {
   return (
-    <div>
-      <Main />
-      <Gallery />
-      <Footer />
-    </div>
+    <Routes>
+      <Route path='/' element={<TindogsPage />} />
+      <Route path='/login' element={<LoginPage />} />
+      <Route path='/register' element={<RegisterPage />} />
+    </Routes>
   )
 }

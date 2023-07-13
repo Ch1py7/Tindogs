@@ -19,8 +19,4 @@ input[type='number']::-webkit-outer-spin-button {
 
 body {
   font-family: 'Satoshi', sans-serif;
-  background: radial-gradient(circle at 50% 0%, #134a81 0%, #050505 50rem);
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: top;
 }
