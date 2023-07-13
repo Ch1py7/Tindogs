@@ -1,17 +1,17 @@
 import { supabase } from 'api'
 import { FC, ReactElement, useEffect, useState } from 'react'
-import { Database } from 'types/supabase'
+import { Supabase } from 'types/supabase'
 import { DogCard } from './DogCard'
 
 export const Gallery: FC = (): ReactElement => {
-  const [users, setUsers] = useState<Database['public']['Tables']['DogsInfo']['Row'][] | null>(null)
+  const [users, setUsers] = useState<Supabase.Row[] | null>(null)
   const [urls, setUrls] = useState<string[]>([''])
 
   const getData = async () => {
     const { data } = await supabase.getDogs()
     setUsers(data)
   }
-
+  
   const getUrl = async () => {
     const data = await supabase.getPicUrl()
     const paths = data.map((url) => Object.values(url!).toString())
