@@ -4,10 +4,12 @@ import { Database } from 'types/supabase'
 
 interface DogCardProps {
   user: Database['public']['Tables']['DogsInfo']['Row']
+  image: string | null
 }
 
-export const DogCard: FC<DogCardProps> = ({ user }): ReactElement => {
+export const DogCard: FC<DogCardProps> = ({ user, image }): ReactElement => {
   const [isLiked, setIsLiked] = useState(false)
+
   return (
     <article
       key={user.id}
@@ -42,11 +44,7 @@ export const DogCard: FC<DogCardProps> = ({ user }): ReactElement => {
           />
         </div>
       </div>
-      <img
-        src={user.image!}
-        alt={user.name!}
-        className='w-[280px] h-[500px] object-cover rounded-xl'
-      />
+      <img src={image!} alt={user.name!} className='w-[280px] h-[500px] object-cover rounded-xl' />
     </article>
   )
 }
