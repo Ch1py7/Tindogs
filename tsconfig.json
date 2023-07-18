@@ -12,6 +12,7 @@
       "@utils": ["/utils/*", "/utils"],
       "@api": ["/api/*", "/api"],
       "@pages": ["/pages/*", "/pages"],
+      "@config": ["/config/*", "/config"],
     },
     "target": "ES2020",
     "useDefineForClassFields": true,
