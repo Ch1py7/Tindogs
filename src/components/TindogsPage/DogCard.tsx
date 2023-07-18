@@ -3,7 +3,7 @@ import { FC, ReactElement, useState } from 'react'
 import { Supabase } from 'types/supabase'
 
 interface DogCardProps {
-  user: Supabase.Row
+  user: Supabase.RowDogs
   image: string | null
 }
 

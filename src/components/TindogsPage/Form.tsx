@@ -1,68 +1,65 @@
-import { supabase } from 'api'
-import { ChangeEvent, FC, FormEvent, ReactElement, useState } from 'react'
+import { SupabaseService } from 'api'
+import { Button, Input } from 'components/common'
+import { ChangeEvent, FC, FormEvent, ReactElement, useReducer } from 'react'
+import { formReducer, initialState } from 'utils/reducer'
 
 export const Form: FC = (): ReactElement => {
-  const [name, setName] = useState<string | null>(null)
-  const [description, setDescription] = useState<string | null>(null)
-  const [mood, setMood] = useState<string | null>(null)
-  const [cuteness, setCuteness] = useState<number | null>(null)
-  const [picture, setPicture] = useState<File | null>(null)
+  const [state, dispatch] = useReducer(formReducer, initialState)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const { path } = await supabase.uploadFile(picture!.name, picture!)
-    await supabase.uploadDog({ name, description, cuteness, mood, image: path })
-
-    setName(null)
-    setDescription(null)
-    setMood(null)
-    setCuteness(null)
-    setPicture(null)
-
-    location.reload()
+    const { path } = await SupabaseService.uploadFile(state.picture!.name, state.picture!)
+    const { session } = await SupabaseService.getSession()
+    if (session) {
+      await SupabaseService.uploadDog({
+        name: state.name,
+        description: state.description,
+        breed: state.breed,
+        mood: state.mood,
+        image: path,
+        owner: session!.user.id,
+      })
+      dispatch({ type: 'reset' })
+      location.reload()
+    } else {
+      dispatch({ type: 'setIsLogin', payload: false })
+    }
   }
 
   const handleUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return
 
-    setPicture(event.target.files[0])
+    dispatch({ type: 'setPicture', payload: event.target.files[0] })
   }
 
   return (
     <form className='flex flex-col w-sm gap-2 items-center' onSubmit={handleSubmit}>
-      <input
-        type='text'
+      <Input
         placeholder='Name'
-        className='text-gray-2 h-[4rem] px-4 bg-[#101010af] border-none rounded-2 w-full font-500 text-xl'
-        value={name || ''}
-        onChange={(e) => setName(e.target.value)}
+        value={state.name}
+        onChange={(e) => dispatch({ type: 'setField', field: 'name', value: e.target.value })}
       />
-      <input
-        type='text'
+      <Input
         placeholder='Description'
-        className='text-gray-2 h-[4rem] px-4 bg-[#101010af] border-none rounded-2 w-full font-500 text-xl'
-        value={description || ''}
-        onChange={(e) => setDescription(e.target.value)}
+        value={state.description}
+        onChange={(e) =>
+          dispatch({ type: 'setField', field: 'description', value: e.target.value })
+        }
       />
-      <input
-        type='text'
+      <Input
         placeholder='Mood'
-        className='text-gray-2 h-[4rem] px-4 bg-[#101010af] border-none rounded-2 w-full font-500 text-xl'
-        value={mood || ''}
-        onChange={(e) => setMood(e.target.value)}
+        value={state.mood}
+        onChange={(e) => dispatch({ type: 'setField', field: 'mood', value: e.target.value })}
       />
-      <input
-        type='number'
-        min={1}
-        max={10}
-        placeholder='Cuteness'
-        className='text-gray-2 h-[4rem] px-4 bg-[#101010af] border-none rounded-2 w-full font-500 text-xl'
-        value={cuteness || ''}
-        onChange={(e) => setCuteness(parseInt(e.target.value))}
+      <Input
+        placeholder='Breed'
+        value={state.breed}
+        onChange={(e) => dispatch({ type: 'setField', field: 'breed', value: e.target.value })}
       />
-      <div className='flex justify-center items-center flex-wrap bg-[#101010af] rounded-[5px] text-gray-2'>
-        <label htmlFor='fileUpload' className='px-10 py-2'>
-          {picture ? picture.name : 'Upload'}
+      {state.isLogin ? null : <p className='text-red-6'>You are not login!</p>}
+      <div className='flex justify-center items-center flex-wrap rounded-[5px] text-gray-2 duration-500 bg-gradient-to-b from-[#101010af] via-[#1d1d1d] to-[#101010af] [background-size:auto_200%] hover:bg-bottom'>
+        <label htmlFor='fileUpload' className='px-10 py-3'>
+          {state.picture ? state.picture.name : 'Upload'}
         </label>
         <input
           title='upload'
@@ -72,12 +69,7 @@ export const Form: FC = (): ReactElement => {
           onChange={handleUpload}
         />
       </div>
-      <button
-        type='submit'
-        className='mt-4 w-[10rem] text-xl font-500 text-slate-3 h-[4rem] bg-gradient-to-r from-[#1A2980] via-[#2670d0] to-[#1A2980] border-none h-[2rem] rounded-2 [background-size:200%_auto] duration-500 hover:bg-right hover:scale-105'
-      >
-        Create Dog
-      </button>
+      <Button colors='from-[#1A2980] via-[#2670d0] to-[#1A2980]' placeholder='Upload Dog' />
     </form>
   )
 }

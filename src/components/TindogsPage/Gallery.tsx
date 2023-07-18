@@ -1,21 +1,21 @@
-import { supabase } from 'api'
+import { SupabaseService } from 'api'
 import { FC, ReactElement, useEffect, useState } from 'react'
 import { Supabase } from 'types/supabase'
 import { DogCard } from './DogCard'
 
 export const Gallery: FC = (): ReactElement => {
-  const [users, setUsers] = useState<Supabase.Row[] | null>(null)
+  const [users, setUsers] = useState<Supabase.RowDogs[] | null>(null)
   const [urls, setUrls] = useState<string[]>([''])
 
   const getData = async () => {
-    const { data } = await supabase.getDogs()
+    const { data } = await SupabaseService.getDogs()
     setUsers(data)
   }
-  
+
   const getUrl = async () => {
-    const data = await supabase.getPicUrl()
+    const data = await SupabaseService.getPicUrl()
     const paths = data.map((url) => Object.values(url!).toString())
-    const urls = await Promise.all(paths.map((path) => supabase.getFiles(path!)))
+    const urls = await Promise.all(paths.map((path) => SupabaseService.getFiles(path!)))
     setUrls(Object.values(urls).map((url) => Object.values(url!).toString()))
   }
 
@@ -24,7 +24,7 @@ export const Gallery: FC = (): ReactElement => {
     getUrl()
   }, [])
 
-  if (!users ||  !urls) {
+  if (!users || !urls) {
     return <div>loading...</div>
   }
   return (
